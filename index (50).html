@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mughal Decline 14-Mark Plug-and-Play Toolkit</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            400: '#facc15',
+                            500: '#eab308',
+                            600: '#ca8a04',
+                        },
+                        emerald: {
+                            400: '#34d399',
+                            500: '#10b981',
+                        },
+                        darkbg: '#0b0f19',
+                        glass: 'rgba(17, 24, 39, 0.75)',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            background-color: #0b0f19;
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(234, 179, 8, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(99, 102, 241, 0.05) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+
+        .glass-card {
+            background: rgba(17, 24, 39, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-input {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #f8fafc;
+        }
+        .glass-input:focus {
+            border-color: #eab308;
+            outline: none;
+            box-shadow: 0 0 10px rgba(234, 179, 8, 0.25);
+        }
+
+        /* Cloze / Blur Recall Styling */
+        .cloze-active .cloze-blur {
+            filter: blur(5px);
+            background: rgba(234, 179, 8, 0.2);
+            color: transparent !important;
+            border-radius: 4px;
+            padding: 0 4px;
+            user-select: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .cloze-active .cloze-blur:hover {
+            filter: blur(0);
+            background: rgba(16, 185, 129, 0.25);
+            color: #facc15 !important;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2"></div>
+
+    <div class="container mx-auto px-4 py-6 max-w-7xl">
+        <!-- APP HEADER -->
+        <header class="glass-card rounded-2xl p-6 mb-6 text-center md:text-left relative overflow-hidden border-t-2 border-t-amber-500/50">
+            <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4 relative z-10">
+                <div>
+                    <div class="flex items-center gap-2 justify-center md:justify-start mb-2">
+                        <span class="px-2.5 py-1 text-xs font-mono font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/30 rounded-full">
+                            CAMBRIDGE O-LEVEL 2059/01
+                        </span>
+                        <span class="px-2.5 py-1 text-xs font-mono font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 rounded-full">
+                            14-MARK ESSAY TOOLKIT
+                        </span>
+                    </div>
+                    <h1 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
+                        Mughal Decline 14-Mark Plug-and-Play Toolkit
+                    </h1>
+                    <p class="text-slate-400 text-sm mt-1 max-w-3xl">
+                        Clean, zero-context-loss study guide & essay assembler. Every factor can be written as a single paragraph or split into double paragraphs with exact examiner-safe details.
+                    </p>
+                </div>
+
+                <!-- Navigation Tabs -->
+                <div class="flex bg-slate-900/80 p-1.5 rounded-xl border border-slate-700/50 w-full md:w-auto gap-1">
+                    <button id="tabBuilderBtn" onclick="switchTab('builder')" class="flex-1 md:flex-none px-5 py-2.5 rounded-lg text-xs md:text-sm font-semibold transition-all flex items-center justify-center gap-2 bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/20">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        <span>Essay Builder</span>
+                    </button>
+                    <button id="tabToolkitBtn" onclick="switchTab('toolkit')" class="flex-1 md:flex-none px-5 py-2.5 rounded-lg text-xs md:text-sm font-semibold transition-all flex items-center justify-center gap-2 text-slate-400 hover:text-white">
+                        <i class="fa-solid fa-book-bookmark"></i>
+                        <span>Master Reference</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- MODE 1: ESSAY BUILDER -->
+        <main id="builderMode" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            <!-- Left Panel: Controls & Selection (5 cols) -->
+            <div class="lg:col-span-5 flex flex-col gap-6">
+                
+                <!-- Quick Preset Selector -->
+                <div class="glass-card rounded-2xl p-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <h2 class="text-sm font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
+                            <i class="fa-solid fa-sliders text-amber-400"></i> Past Paper Presets
+                        </h2>
+                        <span class="text-xs text-slate-400 font-mono">14 Marks</span>
+                    </div>
+                    <select id="presetSelect" onchange="loadPreset()" class="w-full glass-input rounded-xl px-3.5 py-2.5 text-sm cursor-pointer">
+                        <option value="custom">-- Custom Question Setup --</option>
+                        <option value="q_british_vs_weak">Arrival of British vs. Weak Later Mughals (2-Factor)</option>
+                        <option value="q_succession_vs_all">Absence of Succession Law vs. Invasions & Policies (3-4 Factor)</option>
+                        <option value="q_maratha_power">Spread of Marathan Power (3-4 Factor)</option>
+                        <option value="q_british_most_imp">Was British Expansion Most Important? (3-4 Factor)</option>
+                        <option value="q_persians_afghans">Invasions by Persians and Afghans (3-4 Factor)</option>
+                        <option value="q_infighting_successors">In-fighting Between Aurangzeb's Successors (3-4 Factor)</option>
+                        <option value="q_policies_aurangzeb">Were Policies of Aurangzeb the Main Reason? (3-4 Factor)</option>
+                    </select>
+                </div>
+
+                <!-- Structural Mode Settings -->
+                <div class="glass-card rounded-2xl p-5">
+                    <h2 class="text-sm font-bold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-layer-group text-indigo-400"></i> Paragraph Structure Mode
+                    </h2>
+                    
+                    <div class="grid grid-cols-2 gap-3 mb-4">
+                        <button id="modeSingleBtn" onclick="setParagraphMode('single')" class="p-3 rounded-xl border text-xs font-semibold flex flex-col items-center gap-1.5 transition-all border-amber-500 bg-amber-500/10 text-amber-400">
+                            <i class="fa-solid fa-bars text-base"></i>
+                            <span>3–4 Factor Mode</span>
+                            <span class="text-[10px] text-slate-400 font-normal">Single Paragraph per factor</span>
+                        </button>
+
+                        <button id="modeDoubleBtn" onclick="setParagraphMode('double')" class="p-3 rounded-xl border text-xs font-semibold flex flex-col items-center gap-1.5 transition-all border-slate-700 bg-slate-800/40 text-slate-400 hover:border-slate-600">
+                            <i class="fa-solid fa-bars-staggered text-base"></i>
+                            <span>2-Factor Mode</span>
+                            <span class="text-[10px] text-slate-400 font-normal">Split Double Paragraphs (A+B)</span>
+                        </button>
+                    </div>
+
+                    <div class="text-xs text-slate-400 bg-slate-900/60 p-3 rounded-xl border border-slate-800">
+                        <strong class="text-slate-300 font-semibold block mb-1">How To Use It:</strong>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li><span class="text-amber-400 font-mono">3–4 Factor Question:</span> Use Single Paragraph for each factor.</li>
+                            <li><span class="text-indigo-400 font-mono">2-Factor Question:</span> Use Part A + Part B of Factor 1 and Part A + Part B of Factor 2.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Select & Reorder Factors -->
+                <div class="glass-card rounded-2xl p-5 flex-1">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-sm font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                            <i class="fa-solid fa-list-check text-emerald-400"></i> Select & Sequence Factors
+                        </h2>
+                        <span class="text-xs text-slate-400" id="factorCountBadge">0 selected</span>
+                    </div>
+
+                    <div id="factorList" class="flex flex-col gap-3">
+                        <!-- Factor Items Injected via JS -->
+                    </div>
+                </div>
+
+                <!-- Conclusion Selector & Custom Fill -->
+                <div class="glass-card rounded-2xl p-5">
+                    <h2 class="text-sm font-bold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-gavel text-amber-400"></i> Level 5 Conclusion Formula
+                    </h2>
+                    
+                    <div class="flex flex-col gap-3">
+                        <label class="flex items-center gap-3 p-3 rounded-xl border border-slate-700 bg-slate-900/40 cursor-pointer hover:border-slate-600">
+                            <input type="radio" name="conclusionType" value="c1" onchange="renderEssay()" checked class="accent-amber-500">
+                            <div>
+                                <span class="text-xs font-bold text-white block">Conclusion 1 (British Included)</span>
+                                <span class="text-[11px] text-slate-400">Weighs internal chaos vs permanent British industrial annexation.</span>
+                            </div>
+                        </label>
+
+                        <div id="c1CustomInputBox" class="ml-7 pl-3 border-l-2 border-amber-500/40">
+                            <label class="text-[11px] text-slate-400 block mb-1 font-mono">Fill: [name the other factors you wrote about]</label>
+                            <input type="text" id="c1OtherFactorsInput" oninput="renderEssay()" value="Aurangzeb’s policies, succession wars, and foreign invasions" class="w-full glass-input rounded-lg px-3 py-1.5 text-xs">
+                        </div>
+
+                        <label class="flex items-center gap-3 p-3 rounded-xl border border-slate-700 bg-slate-900/40 cursor-pointer hover:border-slate-600">
+                            <input type="radio" name="conclusionType" value="c2" onchange="renderEssay()" class="accent-amber-500">
+                            <div>
+                                <span class="text-xs font-bold text-white block">Conclusion 2 (No British Factor)</span>
+                                <span class="text-[11px] text-slate-400">Weighs internal structural rot/succession against temporary foreign raids.</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Panel: Live Assembled Essay & Utilities (7 cols) -->
+            <div class="lg:col-span-7 flex flex-col gap-6">
+                
+                <div class="glass-card rounded-2xl p-6 flex-1 flex flex-col relative">
+                    
+                    <!-- Top Toolbar for Output -->
+                    <div class="flex flex-wrap items-center justify-between gap-3 pb-4 mb-4 border-b border-slate-800">
+                        <div class="flex items-center gap-3">
+                            <div class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></div>
+                            <h3 class="text-base font-bold text-white">Assembled 14-Mark Answer</h3>
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <!-- Cloze Recall Toggle -->
+                            <button id="clozeToggleBtn" onclick="toggleClozeRecall()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white border border-slate-700 flex items-center gap-1.5 transition-all">
+                                <i class="fa-solid fa-eye-slash text-amber-400"></i>
+                                <span>Cloze Recall Mode</span>
+                            </button>
+
+                            <!-- Copy Essay Button -->
+                            <button onclick="copyFullEssay()" class="px-4 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 hover:bg-amber-400 flex items-center gap-1.5 shadow-lg shadow-amber-500/20 transition-all">
+                                <i class="fa-solid fa-copy"></i>
+                                <span>Copy Essay</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Essay Metrics Bar -->
+                    <div class="grid grid-cols-3 gap-3 mb-5 text-center">
+                        <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
+                            <span class="text-[10px] text-slate-400 font-mono block">TOTAL WORDS</span>
+                            <span id="statWordCount" class="text-lg font-mono font-bold text-amber-400">0</span>
+                        </div>
+                        <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
+                            <span class="text-[10px] text-slate-400 font-mono block">PARAGRAPHS</span>
+                            <span id="statParaCount" class="text-lg font-mono font-bold text-emerald-400">0</span>
+                        </div>
+                        <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
+                            <span class="text-[10px] text-slate-400 font-mono block">EST. WRITING TIME</span>
+                            <span id="statTimeEst" class="text-lg font-mono font-bold text-indigo-400">0 min</span>
+                        </div>
+                    </div>
+
+                    <!-- Live Assembled Text Box -->
+                    <div id="essayOutputContainer" class="flex-1 min-h-[400px] bg-slate-950/70 rounded-xl p-6 border border-slate-800 text-slate-200 leading-relaxed text-sm overflow-y-auto space-y-4 font-sans select-text">
+                        <!-- Rendered Paragraphs Go Here -->
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+
+        <!-- MODE 2: FULL MASTER TOOLKIT REFERENCE -->
+        <main id="toolkitMode" class="hidden flex-col gap-6">
+            
+            <!-- Filter Pills -->
+            <div class="glass-card rounded-2xl p-4 flex flex-wrap gap-2 items-center">
+                <span class="text-xs font-bold text-slate-400 mr-2 uppercase tracking-wider font-mono">Filter Category:</span>
+                <button onclick="filterToolkit('all')" class="tk-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-500 text-slate-950 shadow-md">All Blocks</button>
+                <button onclick="filterToolkit('british')" class="tk-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white border border-slate-700">1. British Expansion</button>
+                <button onclick="filterToolkit('succ')" class="tk-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white border border-slate-700">2. Weak Successors & Succession</button>
+                <button onclick="filterToolkit('aurangzeb')" class="tk-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white border border-slate-700">3. Aurangzeb's Policies</button>
+                <button onclick="filterToolkit('maratha')" class="tk-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white border border-slate-700">4. Maratha Power</button>
+                <button onclick="filterToolkit('invasions')" class="tk-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white border border-slate-700">5. Persian & Afghan Invasions</button>
+                <button onclick="filterToolkit('conclusions')" class="tk-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white border border-slate-700">Switchable Level 5 Conclusions</button>
+            </div>
+
+            <!-- Toolkit Reference Cards -->
+            <div id="toolkitContent" class="space-y-6">
+                <!-- Rendered dynamically from Toolkit master data -->
+            </div>
+
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="mt-8 text-center text-xs text-slate-500 pb-6 font-mono">
+            Cambridge O-Level Pakistan Studies (2059/01) Paper 1 History • Zero-Context-Loss Master Toolkit
+        </footer>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        /* ==========================================================================
+           VERBATIM DATASET (NO OMISSION, NO TIGHTENING, NO CHANGES)
+           ========================================================================== */
+        const TOOLKIT_DATA = {
+            british: {
+                id: 'british',
+                title: '1. BRITISH EXPANSION',
+                category: 'british',
+                single: `The arrival and expansion of the British East India Company (EIC), which first landed at Surat in 1608 purely for trade, was a decisive factor in Mughal decline. Gradually turning trade into a monopoly, Britain used its immense wealth and post-1780 Industrial Revolution weaponry—alongside disciplined armies—to defeat divided Mughal forces who still relied on outdated weapons. Raising private armies and using a "divide and rule" strategy, the British defeated Mughal-aligned rulers at the Battles of Plassey (1757) and Buxar (1764)—aided by traitors like Mir Jafar—before eliminating Tipu Sultan of Mysore in 1799, seizing political and economic control over vital provinces like Bengal and permanently stripping the Mughals of sovereignty.`,
+                doubleA: {
+                    title: '1A (Trade & Industrial Revolution)',
+                    text: `The British East India Company (EIC) first landed at Surat in 1608 purely for trade, when the Mughal Empire was nearing its peak. Initially mutually beneficial, British trade gradually became a monopoly, generating immense wealth that funded superior military technology. As the first nation to undergo the Industrial Revolution—especially after 1780—Britain produced modern firearms and artillery, backed by disciplined armies and strong leadership. They used these modern weapons and tactics to defeat divided Mughal forces who still relied on outdated weaponry, allowing Britain to annex Mughal territories.`
+                },
+                doubleB: {
+                    title: '1B (Conquests & Divide and Rule)',
+                    text: `Over time, the East India Company raised private armies, built fortified trading posts, and applied a clever "divide and rule" strategy to turn rival Indian states against each other. British forces defeated Mughal-aligned rulers at the Battles of Plassey (1757) and Buxar (1764), before eliminating their fiercest southern rival, Tipu Sultan of Mysore, in 1799. Consequently, Britain seized political and economic control over vital provinces like Bengal, aided by treacherous local nobles—such as Mir Jafar at Plassey—who sided with the British for personal gain.`
+                }
+            },
+            succ_infighting: {
+                id: 'succ_infighting',
+                title: '2. WEAK LATER MUGHALS & SUCCESSION INFIGHTING',
+                category: 'succ',
+                single: `The Mughals lacked a definite law of succession, so whenever an emperor died, his surviving sons engaged in palace conspiracies and formed rival factions within the army and nobility to claim the throne. Although Emperor Aurangzeb divided the empire among his three sons to avoid civil war, bloody fighting broke out after his death in 1707, bringing Prince Muazzam to power as Emperor Bahadur Shah I; after his death in 1712, his four sons fought and the victor, Jahandar Shah, was murdered within a year, with twelve different claimants fighting for the throne within a decade. These civil wars divided the Mughal army, drained the royal treasury, and destabilized central authority so key provinces like Bengal and Awadh could break away.`,
+                note: `(Note: When a question asks "British vs. Weak Later Mughal Rulers", simply put those two paragraphs back-to-back as your 2 paragraphs on Later Mughals!)`
+            },
+            weak_rulers: {
+                id: 'weak_rulers',
+                title: '2. WEAK LATER MUGHALS (Extravagant & Weak Rulers)',
+                category: 'succ',
+                single: `The weaknesses of Emperor Aurangzeb’s successors also accelerated Mughal decline, as later emperors indulged in extravagant, luxurious lifestyles and neglected imperial administration and defence. Rather than governing directly, these pleasure-loving rulers left state affairs to corrupt and incompetent ministers and provincial governors. Because of this weak central oversight, ambitious nobles formed selfish court factions and key provinces—such as Bengal, Awadh, and the Deccan—broke away as autonomous states, shrinking the empire’s territory and tax revenue.`
+            },
+            aurangzeb: {
+                id: 'aurangzeb',
+                title: '3. AURANGZEB’S POLICIES',
+                category: 'aurangzeb',
+                single: `Emperor Aurangzeb’s religious and administrative policies severely weakened the Mughal Empire from within. He alienated the non-Muslim majority by reimposing the discriminatory Jizya tax—previously abolished by Emperor Akbar—demolishing several Hindu temples, banning the Hindu custom of Suttee, and treating the Sikhs harshly, which sparked widespread rebellions by the Marathas, Sikhs, and Rajputs. Simultaneously, to fund his costly 25-year Deccan military campaigns against the Marathas, he imposed heavy taxes that emptied the treasury, while his strict Sunni bans on court music, painting, dancing, drinking, gambling, and beard lengths alienated many Muslim subjects—leaving his successors an overstretched, rebellious, and bankrupt empire.`,
+                doubleA: {
+                    title: '3A (Religious Intolerance)',
+                    text: `Emperor Aurangzeb’s religious policies alienated much of his population, as he reimposed the discriminatory Jizya tax on non-Muslims—previously abolished by Emperor Akbar—demolished several Hindu temples, and banned the Hindu custom of Suttee. Combined with his harsh treatment of the Sikhs, these measures alienated the non-Muslim majority, sparking widespread rebellions by the Marathas, Sikhs, and Rajputs that fractured imperial unity and prompted provincial governors to declare autonomy.`
+                },
+                doubleB: {
+                    title: '3B (Deccan Wars, Taxes & Moral Bans)',
+                    text: `Meanwhile, to fund his costly 25-year Deccan military campaigns against the Marathas, Aurangzeb imposed heavy taxes that impoverished farmers and drained the imperial treasury. As an orthodox Sunni ruler, he also lost popularity among many Muslim subjects by banning court music, painting, dancing, drinking, and gambling, and by enforcing strict religious codes such as mandatory beard lengths, leaving his successors an overstretched, rebellious, and bankrupt empire.`
+                }
+            },
+            maratha: {
+                id: 'maratha',
+                title: '4. SPREAD OF MARATHA POWER',
+                category: 'maratha',
+                single: `The rapid rise of Maratha power—concentrated in Maharashtra and founded by the skilled commander Shivaji in the 1670s—greatly accelerated Mughal decline. Using effective guerilla warfare, the Marathas tied Emperor Aurangzeb down in a costly 25-year Deccan campaign that emptied the state treasury and forced him to impose unpopular taxes. After Aurangzeb’s death in 1707, the Marathas expanded northwards—defeating the Mughal army outside Delhi in 1737 and capturing the strategic town of Malwa in 1738—replacing the Mughals as India’s dominant power and filling the vacuum left by shrinking central authority.`
+            },
+            invasions: {
+                id: 'invasions',
+                title: '5. PERSIAN & AFGHAN INVASIONS',
+                category: 'invasions',
+                single: `Foreign invasions by the Persians and Afghans severely weakened the Mughal Empire after Emperor Aurangzeb’s death in 1707. Exploiting weak Mughal leadership, the Persian ruler Nadir Shah defeated Emperor Muhammad Shah at the Battle of Karnal and sacked Delhi in 1739, looting immense wealth including the royal treasury, the Peacock Throne, and the Koh-i-Noor diamond. Similarly, the Afghan ruler Ahmad Shah Abdali launched repeated raids into northern India between 1747 and 1767, plundering wealth and defeating the Marathas at the Third Battle of Panipat (1761); together, these invasions emptied the treasury, shattered imperial military prestige, and left the empire defenseless.`
+            }
+        };
+
+        const CONCLUSIONS = {
+            c1: {
+                title: 'Conclusion 1: Use whenever British Expansion is in the question',
+                template: `In conclusion, while [name the other factors you wrote about] severely weakened the Mughal Empire from within, British expansion was ultimately the decisive factor in its final collapse. Whereas internal infighting and raids by Nadir Shah and Ahmad Shah Abdali created temporary chaos without permanently ending sovereignty, Britain’s Industrial Revolution weaponry, vast trade wealth, and systematic annexation after Plassey (1757) and Buxar (1764) permanently replaced Mughal rule with colonial control.`
+            },
+            c2: {
+                title: 'Conclusion 2: Use ONLY if British Expansion is NOT in the question',
+                template: `In conclusion, the absence of a law of succession (or Aurangzeb’s policies) was the most important cause of Mughal decline. While foreign invasions by Nadir Shah and Ahmad Shah Abdali drained vast wealth, they only succeeded decades after 1707 because continuous succession wars and Aurangzeb’s exhausting 25-year Deccan campaign and religious intolerance had already divided the Mughal army, emptied the treasury, and shattered central authority from within.`
+            }
+        };
+
+        const KEY_CLOZE_TERMS = [
+            "Surat", "1608", "1780", "Plassey", "1757", "Buxar", "1764", "Mir Jafar", "Tipu Sultan", "Mysore", "1799", "Bengal",
+            "1707", "Prince Muazzam", "Bahadur Shah I", "1712", "Jahandar Shah", "Awadh", "Deccan",
+            "Jizya", "Akbar", "Suttee", "Sikhs", "Marathas", "Rajputs", "25-year",
+            "Shivaji", "1670s", "1737", "Malwa", "1738",
+            "Nadir Shah", "Muhammad Shah", "Karnal", "1739", "Peacock Throne", "Koh-i-Noor", "Ahmad Shah Abdali", "1747 and 1767", "1761", "Third Battle of Panipat"
+        ];
+
+        /* ==========================================================================
+           STATE MANAGEMENT
+           ========================================================================== */
+        let state = {
+            activeTab: 'builder',
+            paragraphMode: 'single', // 'single' or 'double'
+            selectedFactors: [
+                { id: 'british', version: 'single', transition: '' },
+                { id: 'succ_infighting', version: 'single', transition: 'However,' },
+                { id: 'aurangzeb', version: 'single', transition: 'Furthermore,' },
+                { id: 'invasions', version: 'single', transition: 'Additionally,' }
+            ],
+            clozeActive: false,
+            filterCategory: 'all'
+        };
+
+        /* ==========================================================================
+           INITIALIZATION
+           ========================================================================== */
+        window.addEventListener('DOMContentLoaded', () => {
+            renderFactorList();
+            renderEssay();
+            renderToolkitReference();
+        });
+
+        function switchTab(tab) {
+            state.activeTab = tab;
+            const builderBtn = document.getElementById('tabBuilderBtn');
+            const toolkitBtn = document.getElementById('tabToolkitBtn');
+            const builderMode = document.getElementById('builderMode');
+            const toolkitMode = document.getElementById('toolkitMode');
+
+            if (tab === 'builder') {
+                builderMode.classList.remove('hidden');
+                builderMode.classList.add('grid');
+                toolkitMode.classList.add('hidden');
+                toolkitMode.classList.remove('flex');
+
+                builderBtn.className = "flex-1 md:flex-none px-5 py-2.5 rounded-lg text-xs md:text-sm font-semibold transition-all flex items-center justify-center gap-2 bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/20";
+                toolkitBtn.className = "flex-1 md:flex-none px-5 py-2.5 rounded-lg text-xs md:text-sm font-semibold transition-all flex items-center justify-center gap-2 text-slate-400 hover:text-white";
+            } else {
+                builderMode.classList.add('hidden');
+                builderMode.classList.remove('grid');
+                toolkitMode.classList.remove('hidden');
+                toolkitMode.classList.add('flex');
+
+                toolkitBtn.className = "flex-1 md:flex-none px-5 py-2.5 rounded-lg text-xs md:text-sm font-semibold transition-all flex items-center justify-center gap-2 bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/20";
+                builderBtn.className = "flex-1 md:flex-none px-5 py-2.5 rounded-lg text-xs md:text-sm font-semibold transition-all flex items-center justify-center gap-2 text-slate-400 hover:text-white";
+            }
+        }
+
+        function setParagraphMode(mode) {
+            state.paragraphMode = mode;
+            const btnS = document.getElementById('modeSingleBtn');
+            const btnD = document.getElementById('modeDoubleBtn');
+
+            if (mode === 'single') {
+                btnS.className = "p-3 rounded-xl border text-xs font-semibold flex flex-col items-center gap-1.5 transition-all border-amber-500 bg-amber-500/10 text-amber-400";
+                btnD.className = "p-3 rounded-xl border text-xs font-semibold flex flex-col items-center gap-1.5 transition-all border-slate-700 bg-slate-800/40 text-slate-400 hover:border-slate-600";
+            } else {
+                btnD.className = "p-3 rounded-xl border text-xs font-semibold flex flex-col items-center gap-1.5 transition-all border-amber-500 bg-amber-500/10 text-amber-400";
+                btnS.className = "p-3 rounded-xl border text-xs font-semibold flex flex-col items-center gap-1.5 transition-all border-slate-700 bg-slate-800/40 text-slate-400 hover:border-slate-600";
+            }
+
+            if (mode === 'double') {
+                let baseIds = [...new Set(state.selectedFactors.map(f => f.id))].slice(0, 2);
+                if (baseIds.length < 2) {
+                    if (!baseIds.includes('british')) baseIds.push('british');
+                    if (!baseIds.includes('weak_rulers') && !baseIds.includes('succ_infighting')) baseIds.push('succ_infighting');
+                }
+                
+                state.selectedFactors = [];
+                baseIds.forEach((id, idx) => {
+                    let transA = idx === 0 ? '' : 'However,';
+                    let transB = 'Furthermore,';
+
+                    if (TOOLKIT_DATA[id].doubleA && TOOLKIT_DATA[id].doubleB) {
+                        state.selectedFactors.push({ id, version: 'A', transition: transA });
+                        state.selectedFactors.push({ id, version: 'B', transition: transB });
+                    } else if (id === 'succ_infighting' || id === 'weak_rulers') {
+                        state.selectedFactors.push({ id: 'succ_infighting', version: 'single', transition: transA });
+                        state.selectedFactors.push({ id: 'weak_rulers', version: 'single', transition: transB });
+                    } else {
+                        state.selectedFactors.push({ id, version: 'single', transition: transA });
+                    }
+                });
+            }
+
+            renderFactorList();
+            renderEssay();
+        }
+
+        /* ==========================================================================
+           FACTOR SELECTION & REORDERING
+           ========================================================================== */
+        const ALL_FACTOR_KEYS = ['british', 'succ_infighting', 'weak_rulers', 'aurangzeb', 'maratha', 'invasions'];
+
+        function renderFactorList() {
+            const listEl = document.getElementById('factorList');
+            document.getElementById('factorCountBadge').innerText = `${state.selectedFactors.length} paragraphs active`;
+
+            let html = '';
+
+            ALL_FACTOR_KEYS.forEach((key) => {
+                const itemData = TOOLKIT_DATA[key];
+                const selectedIdx = state.selectedFactors.findIndex(f => f.id === key);
+                const isSelected = selectedIdx !== -1;
+
+                html += `
+                    <div class="p-3.5 rounded-xl border transition-all ${isSelected ? 'border-amber-500/50 bg-amber-500/5' : 'border-slate-800 bg-slate-900/30'} flex flex-col gap-2">
+                        <div class="flex items-center justify-between">
+                            <label class="flex items-center gap-2.5 cursor-pointer">
+                                <input type="checkbox" ${isSelected ? 'checked' : ''} onchange="toggleFactorSelection('${key}')" class="w-4 h-4 rounded accent-amber-500">
+                                <span class="text-xs font-bold ${isSelected ? 'text-white' : 'text-slate-400'}">${itemData.title}</span>
+                            </label>
+                            
+                            ${isSelected ? `
+                                <div class="flex items-center gap-1">
+                                    <button onclick="moveFactor('${key}', -1)" ${selectedIdx === 0 ? 'disabled class="opacity-30"' : 'class="hover:text-amber-400 text-slate-400"'} title="Move Up"><i class="fa-solid fa-chevron-up text-xs px-1"></i></button>
+                                    <button onclick="moveFactor('${key}', 1)" ${selectedIdx === state.selectedFactors.length - 1 ? 'disabled class="opacity-30"' : 'class="hover:text-amber-400 text-slate-400"'} title="Move Down"><i class="fa-solid fa-chevron-down text-xs px-1"></i></button>
+                                </div>
+                            ` : ''}
+                        </div>
+
+                        ${isSelected ? `
+                            <div class="flex items-center gap-2 mt-1 pl-6">
+                                <span class="text-[10px] text-slate-400 font-mono">Transition Prefix:</span>
+                                <select onchange="updateTransition('${key}', this.value)" class="glass-input rounded px-2 py-0.5 text-[11px]">
+                                    <option value="" ${state.selectedFactors[selectedIdx].transition === '' ? 'selected' : ''}>None (First Factor)</option>
+                                    <option value="However," ${state.selectedFactors[selectedIdx].transition === 'However,' ? 'selected' : ''}>However,</option>
+                                    <option value="Furthermore," ${state.selectedFactors[selectedIdx].transition === 'Furthermore,' ? 'selected' : ''}>Furthermore,</option>
+                                    <option value="Additionally," ${state.selectedFactors[selectedIdx].transition === 'Additionally,' ? 'selected' : ''}>Additionally,</option>
+                                    <option value="In addition," ${state.selectedFactors[selectedIdx].transition === 'In addition,' ? 'selected' : ''}>In addition,</option>
+                                </select>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            });
+
+            listEl.innerHTML = html;
+        }
+
+        function toggleFactorSelection(key) {
+            const idx = state.selectedFactors.findIndex(f => f.id === key);
+            if (idx !== -1) {
+                state.selectedFactors.splice(idx, 1);
+            } else {
+                let defaultTrans = state.selectedFactors.length === 0 ? '' : (state.selectedFactors.length === 1 ? 'However,' : 'Furthermore,');
+                state.selectedFactors.push({ id: key, version: 'single', transition: defaultTrans });
+            }
+            autoAdjustTransitions();
+            renderFactorList();
+            renderEssay();
+        }
+
+        function moveFactor(key, direction) {
+            const idx = state.selectedFactors.findIndex(f => f.id === key);
+            if (idx === -1) return;
+            const targetIdx = idx + direction;
+            if (targetIdx < 0 || targetIdx >= state.selectedFactors.length) return;
+
+            const temp = state.selectedFactors[idx];
+            state.selectedFactors[idx] = state.selectedFactors[targetIdx];
+            state.selectedFactors[targetIdx] = temp;
+
+            autoAdjustTransitions();
+            renderFactorList();
+            renderEssay();
+        }
+
+        function updateTransition(key, val) {
+            const idx = state.selectedFactors.findIndex(f => f.id === key);
+            if (idx !== -1) {
+                state.selectedFactors[idx].transition = val;
+                renderEssay();
+            }
+        }
+
+        function autoAdjustTransitions() {
+            state.selectedFactors.forEach((item, i) => {
+                if (i === 0) item.transition = '';
+                else if (i === 1 && !item.transition) item.transition = 'However,';
+                else if (i >= 2 && !item.transition) item.transition = i === 2 ? 'Furthermore,' : 'Additionally,';
+            });
+        }
+
+        /* ==========================================================================
+           PRESETS LOADER
+           ========================================================================== */
+        function loadPreset() {
+            const preset = document.getElementById('presetSelect').value;
+            if (preset === 'custom') return;
+
+            const radioC1 = document.querySelector('input[name="conclusionType"][value="c1"]');
+            const radioC2 = document.querySelector('input[name="conclusionType"][value="c2"]');
+
+            if (preset === 'q_british_vs_weak') {
+                setParagraphMode('double');
+                state.selectedFactors = [
+                    { id: 'british', version: 'A', transition: '' },
+                    { id: 'british', version: 'B', transition: 'Furthermore,' },
+                    { id: 'succ_infighting', version: 'single', transition: 'However,' },
+                    { id: 'weak_rulers', version: 'single', transition: 'Additionally,' }
+                ];
+                radioC1.checked = true;
+                document.getElementById('c1OtherFactorsInput').value = "weak later Mughal rulers and succession infighting";
+            } else if (preset === 'q_succession_vs_all') {
+                setParagraphMode('single');
+                state.selectedFactors = [
+                    { id: 'succ_infighting', version: 'single', transition: '' },
+                    { id: 'invasions', version: 'single', transition: 'However,' },
+                    { id: 'aurangzeb', version: 'single', transition: 'Furthermore,' },
+                    { id: 'british', version: 'single', transition: 'Additionally,' }
+                ];
+                radioC1.checked = true;
+                document.getElementById('c1OtherFactorsInput').value = "Persian and Afghan invasions and Aurangzeb's policies";
+            } else if (preset === 'q_maratha_power') {
+                setParagraphMode('single');
+                state.selectedFactors = [
+                    { id: 'maratha', version: 'single', transition: '' },
+                    { id: 'aurangzeb', version: 'single', transition: 'However,' },
+                    { id: 'weak_rulers', version: 'single', transition: 'Furthermore,' },
+                    { id: 'british', version: 'single', transition: 'Additionally,' }
+                ];
+                radioC1.checked = true;
+                document.getElementById('c1OtherFactorsInput').value = "Aurangzeb’s policies, weak successors, and foreign invasions";
+            } else if (preset === 'q_british_most_imp') {
+                setParagraphMode('single');
+                state.selectedFactors = [
+                    { id: 'british', version: 'single', transition: '' },
+                    { id: 'maratha', version: 'single', transition: 'However,' },
+                    { id: 'aurangzeb', version: 'single', transition: 'Furthermore,' },
+                    { id: 'weak_rulers', version: 'single', transition: 'Additionally,' }
+                ];
+                radioC1.checked = true;
+                document.getElementById('c1OtherFactorsInput').value = "Maratha expansion, Aurangzeb's policies, and weak successors";
+            } else if (preset === 'q_persians_afghans') {
+                setParagraphMode('single');
+                state.selectedFactors = [
+                    { id: 'invasions', version: 'single', transition: '' },
+                    { id: 'aurangzeb', version: 'single', transition: 'However,' },
+                    { id: 'weak_rulers', version: 'single', transition: 'Furthermore,' },
+                    { id: 'british', version: 'single', transition: 'Additionally,' }
+                ];
+                radioC1.checked = true;
+                document.getElementById('c1OtherFactorsInput').value = "Aurangzeb’s policies, weak successors, and British expansion";
+            } else if (preset === 'q_infighting_successors') {
+                setParagraphMode('single');
+                state.selectedFactors = [
+                    { id: 'succ_infighting', version: 'single', transition: '' },
+                    { id: 'invasions', version: 'single', transition: 'However,' },
+                    { id: 'british', version: 'single', transition: 'Furthermore,' }
+                ];
+                radioC1.checked = true;
+                document.getElementById('c1OtherFactorsInput').value = "Persian and Afghan invasions";
+            } else if (preset === 'q_policies_aurangzeb') {
+                setParagraphMode('single');
+                state.selectedFactors = [
+                    { id: 'aurangzeb', version: 'single', transition: '' },
+                    { id: 'succ_infighting', version: 'single', transition: 'However,' },
+                    { id: 'invasions', version: 'single', transition: 'Furthermore,' },
+                    { id: 'british', version: 'single', transition: 'Additionally,' }
+                ];
+                radioC1.checked = true;
+                document.getElementById('c1OtherFactorsInput').value = "succession wars, foreign invasions, and British expansion";
+            }
+
+            const hasBritish = state.selectedFactors.some(f => f.id === 'british');
+            if (!hasBritish) {
+                radioC2.checked = true;
+            }
+
+            renderFactorList();
+            renderEssay();
+        }
+
+        /* ==========================================================================
+           RENDER ESSAY & STATS
+           ========================================================================== */
+        function renderEssay() {
+            const container = document.getElementById('essayOutputContainer');
+            let paragraphs = [];
+
+            state.selectedFactors.forEach(item => {
+                const data = TOOLKIT_DATA[item.id];
+                let text = '';
+
+                if (item.version === 'single') text = data.single;
+                else if (item.version === 'A') text = data.doubleA.text;
+                else if (item.version === 'B') text = data.doubleB.text;
+
+                if (item.transition && item.transition.trim() !== '') {
+                    text = item.transition + ' ' + text;
+                }
+
+                paragraphs.push(text);
+            });
+
+            const concType = document.querySelector('input[name="conclusionType"]:checked').value;
+            let concText = '';
+
+            if (concType === 'c1') {
+                const customFill = document.getElementById('c1OtherFactorsInput').value || 'other internal factors';
+                concText = CONCLUSIONS.c1.template.replace('[name the other factors you wrote about]', customFill);
+            } else {
+                concText = CONCLUSIONS.c2.template;
+            }
+
+            paragraphs.push(concText);
+
+            let fullHtml = '';
+            let fullRawText = paragraphs.join('\n\n');
+
+            paragraphs.forEach((p, idx) => {
+                let processedPara = p;
+                if (state.clozeActive) {
+                    KEY_CLOZE_TERMS.forEach(term => {
+                        const regex = new RegExp(`\\b${term}\\b`, 'g');
+                        processedPara = processedPara.replace(regex, `<span class="cloze-blur" title="Hover to reveal">${term}</span>`);
+                    });
+                }
+
+                const isConclusion = idx === paragraphs.length - 1;
+                fullHtml += `
+                    <p class="${isConclusion ? 'font-medium text-amber-200/95 bg-amber-500/10 p-4 rounded-xl border border-amber-500/20' : ''}">
+                        ${processedPara}
+                    </p>
+                `;
+            });
+
+            container.innerHTML = fullHtml || `<p class="text-slate-500 italic text-center py-10">Select at least one factor to assemble your 14-mark essay.</p>`;
+
+            const words = fullRawText.trim() ? fullRawText.trim().split(/\s+/).length : 0;
+            document.getElementById('statWordCount').innerText = words;
+            document.getElementById('statParaCount').innerText = paragraphs.length;
+            const timeEst = Math.ceil(words / 22);
+            document.getElementById('statTimeEst').innerText = `${timeEst} min`;
+        }
+
+        function toggleClozeRecall() {
+            state.clozeActive = !state.clozeActive;
+            const btn = document.getElementById('clozeToggleBtn');
+            const container = document.getElementById('essayOutputContainer');
+
+            if (state.clozeActive) {
+                container.classList.add('cloze-active');
+                btn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-500 text-slate-950 border border-amber-400 flex items-center gap-1.5 transition-all shadow-md";
+            } else {
+                container.classList.remove('cloze-active');
+                btn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white border border-slate-700 flex items-center gap-1.5 transition-all";
+            }
+
+            renderEssay();
+        }
+
+        /* ==========================================================================
+           COPY FUNCTIONALITY
+           ========================================================================== */
+        function copyFullEssay() {
+            const container = document.getElementById('essayOutputContainer');
+            const textToCopy = container.innerText;
+            copyToClipboard(textToCopy, "Complete 14-mark essay copied to clipboard!");
+        }
+
+        function copyTextBlock(text, label) {
+            copyToClipboard(text, `${label} copied to clipboard!`);
+        }
+
+        function copyToClipboard(text, successMsg) {
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast(successMsg);
+                }).catch(() => {
+                    fallbackCopy(text, successMsg);
+                });
+            } else {
+                fallbackCopy(text, successMsg);
+            }
+        }
+
+        function fallbackCopy(text, successMsg) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-999999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showToast(successMsg);
+            } catch (err) {
+                showToast("Failed to copy text");
+            }
+            document.body.removeChild(textArea);
+        }
+
+        function showToast(msg) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = "bg-slate-900 text-amber-400 border border-amber-500/40 px-4 py-2.5 rounded-xl shadow-2xl text-xs font-mono flex items-center gap-2 animate-bounce";
+            toast.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400"></i> ${msg}`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        /* ==========================================================================
+           MODE 2: RENDER REFERENCE TOOLKIT
+           ========================================================================== */
+        function renderToolkitReference() {
+            const container = document.getElementById('toolkitContent');
+            let html = '';
+
+            html += `
+                <div class="glass-card rounded-2xl p-6 border-l-4 border-l-amber-500">
+                    <h3 class="text-base font-bold text-white mb-2">How to Assemble Any Mughal Decline 14-Marker</h3>
+                    <ul class="text-xs text-slate-300 space-y-1.5 font-sans">
+                        <li><strong class="text-amber-400">Paragraph 1 (Given Factor):</strong> Pick the block named first in the exam question (no transition word needed).</li>
+                        <li><strong class="text-emerald-400">Paragraphs 2, 3, and 4 (Other Factors):</strong> Pick 3 other blocks from below (add "However," to Paragraph 2, and "Furthermore," or "Additionally," to Paragraphs 3–4).</li>
+                        <li><strong class="text-indigo-400">Paragraph 5 (Level 5 Judgment):</strong> Use the Master Conclusion Formula at the bottom, plugging in the exact factors from your question.</li>
+                    </ul>
+                </div>
+            `;
+
+            Object.keys(TOOLKIT_DATA).forEach(key => {
+                const item = TOOLKIT_DATA[key];
+                
+                html += `
+                    <div class="toolkit-card glass-card rounded-2xl p-6 flex flex-col gap-4" data-category="${item.category}">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                            <h3 class="text-base font-bold text-amber-400 font-mono">${item.title}</h3>
+                            <span class="text-[10px] font-mono bg-slate-800 text-slate-400 px-2.5 py-1 rounded-full border border-slate-700">VERBATIM BLOCK</span>
+                        </div>
+
+                        ${item.single ? `
+                            <div class="bg-slate-950/60 p-4 rounded-xl border border-slate-800 relative group">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-xs font-bold text-emerald-400 font-mono">Single Paragraph Version</span>
+                                    <button onclick="copyTextBlock(\`${escapeQuotes(item.single)}\`, '${item.title} (Single)')" class="text-xs text-slate-400 hover:text-amber-400 flex items-center gap-1 font-mono">
+                                        <i class="fa-solid fa-copy"></i> Copy
+                                    </button>
+                                </div>
+                                <p class="text-sm text-slate-300 leading-relaxed">${item.single}</p>
+                            </div>
+                        ` : ''}
+
+                        ${item.doubleA ? `
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="bg-slate-950/60 p-4 rounded-xl border border-slate-800 relative">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-xs font-bold text-indigo-400 font-mono">${item.doubleA.title}</span>
+                                        <button onclick="copyTextBlock(\`${escapeQuotes(item.doubleA.text)}\`, '${item.doubleA.title}')" class="text-xs text-slate-400 hover:text-amber-400 flex items-center gap-1 font-mono">
+                                            <i class="fa-solid fa-copy"></i> Copy
+                                        </button>
+                                    </div>
+                                    <p class="text-sm text-slate-300 leading-relaxed">${item.doubleA.text}</p>
+                                </div>
+
+                                <div class="bg-slate-950/60 p-4 rounded-xl border border-slate-800 relative">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-xs font-bold text-indigo-400 font-mono">${item.doubleB.title}</span>
+                                        <button onclick="copyTextBlock(\`${escapeQuotes(item.doubleB.text)}\`, '${item.doubleB.title}')" class="text-xs text-slate-400 hover:text-amber-400 flex items-center gap-1 font-mono">
+                                            <i class="fa-solid fa-copy"></i> Copy
+                                        </button>
+                                    </div>
+                                    <p class="text-sm text-slate-300 leading-relaxed">${item.doubleB.text}</p>
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        ${item.note ? `
+                            <div class="text-xs text-amber-300/80 bg-amber-500/10 p-3 rounded-xl border border-amber-500/20 italic font-mono">
+                                ${item.note}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            });
+
+            html += `
+                <div class="toolkit-card glass-card rounded-2xl p-6 flex flex-col gap-4" data-category="conclusions">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <h3 class="text-base font-bold text-amber-400 font-mono">SWITCHABLE LEVEL 5 CONCLUSIONS</h3>
+                        <span class="text-[10px] font-mono bg-amber-500/10 text-amber-400 px-2.5 py-1 rounded-full border border-amber-500/30">LEVEL 5 FORMULA</span>
+                    </div>
+
+                    <div class="bg-slate-950/60 p-4 rounded-xl border border-slate-800">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-emerald-400 font-mono">${CONCLUSIONS.c1.title}</span>
+                            <button onclick="copyTextBlock(\`${escapeQuotes(CONCLUSIONS.c1.template)}\`, 'Conclusion 1')" class="text-xs text-slate-400 hover:text-amber-400 flex items-center gap-1 font-mono">
+                                <i class="fa-solid fa-copy"></i> Copy
+                            </button>
+                        </div>
+                        <p class="text-sm text-slate-300 leading-relaxed">${CONCLUSIONS.c1.template}</p>
+                    </div>
+
+                    <div class="bg-slate-950/60 p-4 rounded-xl border border-slate-800">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-indigo-400 font-mono">${CONCLUSIONS.c2.title}</span>
+                            <button onclick="copyTextBlock(\`${escapeQuotes(CONCLUSIONS.c2.template)}\`, 'Conclusion 2')" class="text-xs text-slate-400 hover:text-amber-400 flex items-center gap-1 font-mono">
+                                <i class="fa-solid fa-copy"></i> Copy
+                            </button>
+                        </div>
+                        <p class="text-sm text-slate-300 leading-relaxed">${CONCLUSIONS.c2.template}</p>
+                    </div>
+                </div>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        function filterToolkit(category) {
+            state.filterCategory = category;
+            const buttons = document.querySelectorAll('.tk-filter-btn');
+            buttons.forEach(btn => {
+                btn.className = "tk-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white border border-slate-700";
+            });
+            event.target.className = "tk-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-500 text-slate-950 shadow-md";
+
+            const cards = document.querySelectorAll('.toolkit-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function escapeQuotes(str) {
+            return str.replace(/"/g, '&quot;').replace(/'/g, "\\'").replace(/`/g, "\\`");
+        }
+    </script>
+</body>
+</html>
